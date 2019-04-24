@@ -1,28 +1,22 @@
-{% set name = "pyaml" %}
-{% set version = "18.11.0" %}
-{% set bundle = "tar.gz" %}
-{% set hash_type = "sha256" %}
-{% set hash = "b96292cc409e0f222b6fecff96afd2e19cfab5d1f2606344907751d42301263a" %}
-{% set build = 0 %}
+{% set version = "19.4.1" %}
 
 package:
-  name: {{ name|lower }}
+  name: pyaml
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.{{ bundle }}
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ bundle }}
-  {{ hash_type }}: {{ hash }}
+  url: https://pypi.io/packages/source/p/pyaml/pyaml-{{ version }}.tar.gz
+  sha256: c79ae98ececda136a034115ca178ee8bf3aa7df236c488c2f55d12f177b88f1e
 
 build:
+  number: 0
   noarch: python
-  number: {{ build }}
-  script: python setup.py install --single-version-externally-managed --record=record.txt
+  script: "{{ PYTHON }} -m pip install . --no-deps -vv"
 
 requirements:
   build:
     - python
-    - setuptools
+    - pip
 
   run:
     - python
