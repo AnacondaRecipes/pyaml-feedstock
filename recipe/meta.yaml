@@ -1,4 +1,4 @@
-{% set version = "20.4.0" %}
+{% set version = "21.8.3" %}
 
 package:
   name: pyaml
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/p/pyaml/pyaml-{{ version }}.tar.gz
-  sha256: 29a5c2a68660a799103d6949167bd6c7953d031449d08802386372de1db6ad71
+  sha256: a1636d63c476328a07213d0b7111bb63570f1ab8a3eddf60522630250c23d975
 
 build:
   number: 0
