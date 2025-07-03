@@ -45,6 +45,7 @@ about:
   license: WTFPL
   license_file: COPYING
   summary: 'PyYAML-based module to produce pretty and readable YAML-serialized data'
+  description: 'PyYAML-based python module to produce a bit more pretty and human-readable YAML-serialized data.'
   dev_url: https://github.com/mk-fg/pretty-yaml
   doc_url: https://github.com/mk-fg/pretty-yaml
 
