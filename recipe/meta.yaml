@@ -1,14 +1,16 @@
-{% set version = "20.4.0" %}
+{% set name = "pyaml" %}
+{% set version = "25.5.0" %}
 
 package:
-  name: pyaml
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/p/pyaml/pyaml-{{ version }}.tar.gz
-  sha256: 29a5c2a68660a799103d6949167bd6c7953d031449d08802386372de1db6ad71
+  url: https://pypi.io/packages/source/p/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 5799560c7b1c9daf35a7a4535f53e2c30323f74cbd7cb4f2e715b16dd681a58a
 
 build:
+  skip: true  # [py<38]
   number: 0
   noarch: python
   script: "{{ PYTHON }} -m pip install . --no-deps -vv"
@@ -17,7 +19,9 @@ requirements:
   build:
     - python
     - pip
-
+  host:
+    - python
+    - setuptools
   run:
     - python
     - pyyaml
