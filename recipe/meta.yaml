@@ -27,14 +27,18 @@ requirements:
     - pyyaml
 
 test:
+  source_files:
+    - pyaml/tests
   requires:
     - pip
+    - pytest
   imports:
     - pyaml
     - pyaml.tests
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -vv pyaml/tests
 
 about:
   home: https://github.com/mk-fg/pretty-yaml
