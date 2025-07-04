@@ -29,7 +29,7 @@ requirements:
 
 test:
   source_files:
-    - pyaml/tests
+    - pyaml
   requires:
     - pip
     - pytest
