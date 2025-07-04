@@ -29,6 +29,8 @@ requirements:
 
 test:
   source_files:
+  # Must include entire folder rather than just 'tests' one, due to tests looking
+  # for Python type names prefixed with 'pyaml.tests'
     - pyaml
   requires:
     - pip
