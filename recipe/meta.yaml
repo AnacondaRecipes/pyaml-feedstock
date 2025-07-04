@@ -27,6 +27,13 @@ requirements:
     - python
     - pyyaml
 
+# Skip few tests that won't work on Windows OS
+{% set skip_tests = "" %}
+# Test uses os fchmod
+{% set skip_tests = skip_tests + " --deselect=pyaml/tests/test_cli.py::CliToolTests::test_replace" %}  # [win]
+# Test with incorrect Windows path: open('/dev/null')
+{% set skip_tests = skip_tests + " --deselect=pyaml/tests/test_dump.py::DumpTests::test_repr_undefined" %}  # [win]
+
 test:
   source_files:
   # Must include entire folder rather than just 'tests' one, due to tests looking
@@ -41,7 +48,7 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -vv pyaml/tests
+    - pytest -vv {{ skip_tests }} pyaml/tests
 
 about:
   home: https://github.com/mk-fg/pretty-yaml
