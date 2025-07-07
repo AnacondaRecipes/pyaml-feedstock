@@ -1,37 +1,62 @@
-{% set version = "20.4.0" %}
+{% set name = "pyaml" %}
+{% set version = "25.5.0" %}
 
 package:
-  name: pyaml
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/p/pyaml/pyaml-{{ version }}.tar.gz
-  sha256: 29a5c2a68660a799103d6949167bd6c7953d031449d08802386372de1db6ad71
+  url: https://pypi.io/packages/source/p/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 5799560c7b1c9daf35a7a4535f53e2c30323f74cbd7cb4f2e715b16dd681a58a
 
 build:
+  skip: true  # [py<38]
   number: 0
-  noarch: python
-  script: "{{ PYTHON }} -m pip install . --no-deps -vv"
+  script: "{{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv"
+  entry_points:
+    - pyaml = pyaml.cli:main
 
 requirements:
   build:
     - python
     - pip
-
+  host:
+    - python
+    - setuptools
+    - pip
+    - wheel
   run:
     - python
     - pyyaml
 
+# Skip few tests that won't work on Windows OS
+{% set skip_tests = "" %}
+# Test uses os fchmod
+{% set skip_tests = skip_tests + " --deselect=test_cli.py::CliToolTests::test_replace" %}  # [win]
+# Test with incorrect Windows path: open('/dev/null')
+{% set skip_tests = skip_tests + " --deselect=test_dump.py::DumpTests::test_repr_undefined" %}  # [win]
+
 test:
+  requires:
+    - pip
+    - pytest
   imports:
     - pyaml
     - pyaml.tests
+  commands:
+    - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pyaml --help
+    # Tests are looking for Python type names prefixed with 'pyaml.tests'
+    - pytest --pyargs pyaml.tests {{ skip_tests }}
 
 about:
   home: https://github.com/mk-fg/pretty-yaml
   license: WTFPL
   license_file: COPYING
+  license_family: OTHER
   summary: 'PyYAML-based module to produce pretty and readable YAML-serialized data'
+  description: 'PyYAML-based python module to produce a bit more pretty and human-readable YAML-serialized data.'
   dev_url: https://github.com/mk-fg/pretty-yaml
   doc_url: https://github.com/mk-fg/pretty-yaml
 
