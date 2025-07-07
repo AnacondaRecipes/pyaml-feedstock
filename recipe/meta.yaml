@@ -35,10 +35,6 @@ requirements:
 {% set skip_tests = skip_tests + " --deselect=pyaml/tests/test_dump.py::DumpTests::test_repr_undefined" %}  # [win]
 
 test:
-  source_files:
-  # Must include entire folder rather than just 'tests' one, due to tests looking
-  # for Python type names prefixed with 'pyaml.tests'.
-    - pyaml
   requires:
     - pip
     - pytest
@@ -48,7 +44,8 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -vv {{ skip_tests }} pyaml/tests
+    # Tests are looking for Python type names prefixed with 'pyaml.tests'
+    - pytest --pyargs pyaml.tests {{ skip_tests }}
 
 about:
   home: https://github.com/mk-fg/pretty-yaml
