@@ -30,9 +30,9 @@ requirements:
 # Skip few tests that won't work on Windows OS
 {% set skip_tests = "" %}
 # Test uses os fchmod
-{% set skip_tests = skip_tests + " --deselect=pyaml/tests/test_cli.py::CliToolTests::test_replace" %}  # [win]
+{% set skip_tests = skip_tests + " --deselect=test_cli.py::CliToolTests::test_replace" %}  # [win]
 # Test with incorrect Windows path: open('/dev/null')
-{% set skip_tests = skip_tests + " --deselect=pyaml/tests/test_dump.py::DumpTests::test_repr_undefined" %}  # [win]
+{% set skip_tests = skip_tests + " --deselect=test_dump.py::DumpTests::test_repr_undefined" %}  # [win]
 
 test:
   requires:
