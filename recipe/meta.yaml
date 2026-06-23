@@ -1,18 +1,24 @@
 {% set name = "pyaml" %}
-{% set version = "25.5.0" %}
+{% set version = "26.2.1" %}
+{% set skip_tests = "" %}
+{% set skip_tests = 'skip_tests + " --deselect=test_cli.py::CliToolTests::test_replace"' %}  # [win]
+{% set skip_tests = 'skip_tests + " --deselect=test_dump.py::DumpTests::test_repr_undefined"' %}  # [win]
 
+# Skip few tests that won't work on Windows OS
+# Test uses os fchmod
+# Test with incorrect Windows path: open('/dev/null')
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/p/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 5799560c7b1c9daf35a7a4535f53e2c30323f74cbd7cb4f2e715b16dd681a58a
+  url: https://pypi.org/packages/source/p/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 489dd82997235d4cfcf76a6287fce2f075487d77a6567c271e8d790583690c68
 
 build:
   skip: true  # [py<38]
   number: 0
-  script: "{{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv"
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
   entry_points:
     - pyaml = pyaml.cli:main
 
@@ -28,13 +34,6 @@ requirements:
   run:
     - python
     - pyyaml
-
-# Skip few tests that won't work on Windows OS
-{% set skip_tests = "" %}
-# Test uses os fchmod
-{% set skip_tests = skip_tests + " --deselect=test_cli.py::CliToolTests::test_replace" %}  # [win]
-# Test with incorrect Windows path: open('/dev/null')
-{% set skip_tests = skip_tests + " --deselect=test_dump.py::DumpTests::test_repr_undefined" %}  # [win]
 
 test:
   requires:
@@ -55,8 +54,8 @@ about:
   license: WTFPL
   license_file: COPYING
   license_family: OTHER
-  summary: 'PyYAML-based module to produce pretty and readable YAML-serialized data'
-  description: 'PyYAML-based python module to produce a bit more pretty and human-readable YAML-serialized data.'
+  summary: PyYAML-based module to produce pretty and readable YAML-serialized data
+  description: PyYAML-based python module to produce a bit more pretty and human-readable YAML-serialized data.
   dev_url: https://github.com/mk-fg/pretty-yaml
   doc_url: https://github.com/mk-fg/pretty-yaml
 
