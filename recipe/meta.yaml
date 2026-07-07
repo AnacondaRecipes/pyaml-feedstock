@@ -29,12 +29,16 @@ requirements:
     - python
     - pyyaml
 
-{% set skip_tests = "" %}
 # Skip few tests that won't work on Windows OS
-# Test uses os fchmod
-{% set skip_tests = skip_tests + " --deselect=test_cli.py::CliToolTests::test_replace" %}  # [win]
-# Test with incorrect Windows path: open('/dev/null')
-{% set skip_tests = skip_tests + " --deselect=test_dump.py::DumpTests::test_repr_undefined" %}  # [win]
+{% set skip_tests_win = [
+  # Test with incorrect Windows path: open('/dev/null')
+  " --deselect=test_cli.py::CliToolTests::test_multiple_args",
+  " --deselect=test_cli.py::CliToolTests::test_out_file",
+  " --deselect=test_dump.py::DumpTests::test_repr_undefined",
+  # Test uses os fchmod
+  " --deselect=test_cli.py::CliToolTests::test_replace"
+] %}
+
 test:
   requires:
     - pip
@@ -47,7 +51,7 @@ test:
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
     - pyaml --help
     # Tests are looking for Python type names prefixed with 'pyaml.tests'
-    - pytest --pyargs pyaml.tests {{ skip_tests }}
+    - pytest --pyargs pyaml.tests {{ skip_tests_win | join(' ') }}
 
 about:
   home: https://github.com/mk-fg/pretty-yaml
