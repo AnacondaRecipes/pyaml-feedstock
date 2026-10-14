@@ -1,13 +1,6 @@
 {% set name = "pyaml" %}
 {% set version = "26.7.0" %}
-{% set skip_tests_win = [
-  " --deselect=test_cli.py::CliToolTests::test_multiple_args",
-  " --deselect=test_cli.py::CliToolTests::test_out_file",
-  " --deselect=test_dump.py::DumpTests::test_repr_undefined",
-  " --deselect=test_cli.py::CliToolTests::test_replace"
-] %}
 
-# Skip few tests that won't work on Windows OS
 package:
   name: {{ name }}
   version: {{ version }}
@@ -35,6 +28,16 @@ requirements:
   run:
     - python
     - pyyaml
+
+# Skip few tests that won't work on Windows OS
+{% set skip_tests_win = [
+  # Test with incorrect Windows path: open('/dev/null')
+  " --deselect=test_cli.py::CliToolTests::test_multiple_args",
+  " --deselect=test_cli.py::CliToolTests::test_out_file",
+  " --deselect=test_dump.py::DumpTests::test_repr_undefined",
+  # Test uses os fchmod
+  " --deselect=test_cli.py::CliToolTests::test_replace"
+] %}
 
 test:
   requires:
