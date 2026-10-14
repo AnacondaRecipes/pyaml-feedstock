@@ -1,13 +1,20 @@
 {% set name = "pyaml" %}
-{% set version = "26.2.1" %}
+{% set version = "26.7.0" %}
+{% set skip_tests_win = [
+  " --deselect=test_cli.py::CliToolTests::test_multiple_args",
+  " --deselect=test_cli.py::CliToolTests::test_out_file",
+  " --deselect=test_dump.py::DumpTests::test_repr_undefined",
+  " --deselect=test_cli.py::CliToolTests::test_replace"
+] %}
 
+# Skip few tests that won't work on Windows OS
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://pypi.org/packages/source/p/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 489dd82997235d4cfcf76a6287fce2f075487d77a6567c271e8d790583690c68
+  sha256: 11cda3a796efc6dbce0d56836be56cfd26289dad07bcd78e9904086729929c93
 
 build:
   skip: true  # [py<38]
@@ -28,16 +35,6 @@ requirements:
   run:
     - python
     - pyyaml
-
-# Skip few tests that won't work on Windows OS
-{% set skip_tests_win = [
-  # Test with incorrect Windows path: open('/dev/null')
-  " --deselect=test_cli.py::CliToolTests::test_multiple_args",
-  " --deselect=test_cli.py::CliToolTests::test_out_file",
-  " --deselect=test_dump.py::DumpTests::test_repr_undefined",
-  # Test uses os fchmod
-  " --deselect=test_cli.py::CliToolTests::test_replace"
-] %}
 
 test:
   requires:
